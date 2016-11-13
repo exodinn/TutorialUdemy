@@ -1,0 +1,51 @@
+package passingByValueVsPassingByReference;
+
+public class PassingByValue {
+	public static void main(String[] args) {
+		//tworzymy obiekt klasy PassingByValue, teraz mo¿emy u¿yæ wewn¹trz klasy niestatyczne metody klasy PassingByValue
+		PassingByValue app = new PassingByValue();
+		
+	
+		int value = 7;
+		System.out.println("1. Value is: " + value);//pokaze 1.Value is: 7
+		//pokaze 2.Value is: 7, kopiujemy wartoœæ ze zmiennej value z main do metody (a dok³adniej do zmiennej value w metodzie) tej metody, to siê nazywa passing by value
+		app.show(value);
+		
+		System.out.println("4. Value is: " + value);//poka¿e 7,	do metodzy przekazaliœmy jedynie kopiê zmiennej value a nie odnoœnik (reference) do value
+		
+		//----------------------------------------------------------
+		System.out.println();
+		//wy¿ej by³o passing by value, dla obiektów te¿ mamy passing by value, tylko, ¿e do metod nie kopujemy wartoœci, tylko adresy zmiennych
+		//w Javie nie ma passing by reference bo to by oznacza³o, ¿e gdybysmy zmienili coœ w obiekcie w metodzie to poza metod¹ widoczna by by³a
+		//ta zmiana - a jak widaæ dla 4. Person is: Person [name = Mietek] - metoda nie zmieni³a (na sta³e) wartoœci name dla osoba - zmiana nast¹pi³a
+		//tylko wewn¹trz metody, bo wrzuciliœmy do niej tylko kopiê adresu, a nie adres
+		
+		//osoba tylko przechowuje adres miejsca przechowywania obiektu Person; dopiero new Person("Mietek") alokuje pamiêæ dla obiektu Person
+		Person osoba = new Person("Mietek");
+		
+		System.out.println("1. Person is: " + osoba);//wyœwietli 1. Person is: Person [name = Mietek]
+		app.show(osoba);//przekazuje kopiê adresu obiektu osoba do metody
+		
+		System.out.println("4. Person is: " + osoba);//wyœwietli 4. Person is: Person [name = Mietek], chyba, ¿e dodamy osoba.setName("Waldek") w metodzie
+		
+	}
+	
+	public void show(int value) {
+		System.out.println("2. Value is: " + value);//poka¿e 7
+		//zmieniamy wartoœæ value, ale tylko kopii value przekazanej jako parametr metody, która jest widoczna tylko w tej metodzie, a niewidoczna poza ni¹
+		value = 8;
+		System.out.println("3. Value is: " + value);//poka¿e 8
+	}
+	//prze³adowanie metody (method overloading), jako parametr wchodzi adres do obiektu Person
+	public void show(Person osoba){
+		System.out.println("2. Person is: " + osoba);//wyœwietli 2. Person is: Person [name = Mietek]
+		
+		//tu na sta³e zmienimy wartoœæ osoba, bo metoda ma kopiê adresu osoba z maina i adres ten wskazuje na obiket osoba z maina
+		osoba.setName("Waldek");
+		
+		osoba = new Person("Zdzichu");//tu przypisujemy osoba nowy adres pamiêci do nowego obiektu Person, osoba w metodzie i osoba w main to dwie ró¿ne zmienne
+		osoba.setName("Wlodek");//tu nie zmienimy wartoœci osoba z main bo osoba z metody przechowuje juz adres do innego obiektu ni¿ osoba z main
+		System.out.println("3. Person is: " + osoba);//wyœwietli 3. Person is: Person [name = Zdzochu]
+	}
+}
+
